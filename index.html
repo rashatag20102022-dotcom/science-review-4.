@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مراجعة العلوم التفاعلية - الصف السابع</title>
+<style>
+body{margin:0;font-family:Tahoma,Arial,sans-serif;background:#eef6ff;color:#17324d}
+header{background:linear-gradient(135deg,#0d47a1,#1976d2);color:#fff;text-align:center;padding:24px 12px}
+header h1{margin:0 0 8px}.wrap{max-width:900px;margin:25px auto;padding:15px}
+.card{background:#fff;border-radius:18px;padding:24px;margin-bottom:18px;box-shadow:0 4px 16px #0002}
+input{width:100%;padding:13px;margin:8px 0 16px;border:1px solid #bbb;border-radius:10px;font-size:16px;box-sizing:border-box}
+button{background:#1565c0;color:#fff;border:0;border-radius:10px;padding:12px 20px;font-size:16px;cursor:pointer;margin:5px}
+button:hover{background:#0d47a1}.hidden{display:none}
+.levels{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.level{border:0;border-radius:15px;padding:20px;color:white;font-size:18px;min-width:220px;cursor:pointer}
+.green{background:#2e7d32}.orange{background:#ef6c00}.purple{background:#7b1fa2}
+.question{background:#f7fbff;border-right:5px solid #1976d2;padding:16px;border-radius:10px;margin:14px 0}
+.option{display:block;background:#fff;border:1px solid #d7e3ef;padding:10px;margin:8px 0;border-radius:8px}
+.badges{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}.badge{background:#fff8df;border:2px solid #f5b400;padding:12px;border-radius:12px}
+.progress{height:16px;background:#ddd;border-radius:20px;overflow:hidden;margin:12px 0}.bar{height:100%;width:0;background:#43a047;transition:.4s}
+.certificate{text-align:center;border:8px double #1565c0;padding:30px;background:#fff}
+.score{font-size:24px;font-weight:bold;color:#1565c0}
+small{color:#666} footer{text-align:center;padding:20px;color:#555}
+@media print{body{background:white}.no-print,header,.card:not(#certificatePage),footer{display:none!important}#certificatePage{display:block!important;box-shadow:none}}
+</style>
+</head>
+<body>
+<header>
+<h1>🔬 مراجعة العلوم التفاعلية</h1>
+<p>الصف السابع – الوحدة الرابعة</p>
+<p>مدرسة البريرات حلقة ثانية بنين</p>
+<p>إعداد المعلمة: رشا محي الدين 👩‍🏫</p>
+</header>
+
+<div class="wrap">
+<div class="card" id="start">
+<h2>أهلاً بك يا بطل! 🌟</h2>
+<p>أدخل بياناتك ثم ابدأ رحلة التحدي العلمي.</p>
+<label>اسم الطالب</label><input id="name" placeholder="اكتب اسمك">
+<label>الصف والشعبة</label><input id="grade" placeholder="مثال: 7A">
+<button onclick="begin()">ابدأ التحدي 🚀</button>
+</div>
+
+<div class="card hidden" id="levels">
+<h2>🎮 اختر المستوى</h2>
+<div class="levels">
+<button class="level green" onclick="load('easy')">🟢 المستوى الأول<br><small style="color:white">المستكشف العلمي</small></button>
+<button class="level orange" onclick="load('medium')">🟠 المستوى الثاني<br><small style="color:white">العالم الصغير</small></button>
+<button class="level purple" onclick="load('hard')">🟣 المستوى الثالث<br><small style="color:white">خبير الجدول الدوري</small></button>
+</div>
+</div>
+
+<div class="card hidden" id="quiz">
+<h2 id="title"></h2>
+<div class="progress"><div class="bar" id="bar"></div></div>
+<div id="qs"></div>
+<button onclick="finish()">إنهاء المستوى والتحقق من الإجابات ✅</button>
+</div>
+
+<div class="card hidden" id="result">
+<h2>🏆 النتيجة</h2><p class="score" id="score"></p>
+<h3>🏅 الأوسمة التي حصلت عليها</h3><div class="badges" id="badges"></div>
+<div class="no-print"><button onclick="certificate()">عرض الشهادة 📜</button><button onclick="goLevels()">تجربة مستوى آخر 🎮</button></div>
+</div>
+
+<div class="card hidden" id="certificatePage">
+<div class="certificate">
+<h1>🏆 شهادة إنجاز 🏆</h1>
+<h2>مدرسة البريرات حلقة ثانية بنين</h2>
+<p>تتقدم هذه الشهادة للطالب</p><h2 id="cname"></h2>
+<p id="cgrade"></p>
+<p>وذلك لإتمامه بنجاح</p>
+<h2>مراجعة العلوم التفاعلية للصف السابع</h2>
+<p class="score" id="cscore"></p>
+<p>إعداد المعلمة: <strong>رشا محي الدين</strong></p>
+<p>🌟 استمر في التعلم والاكتشاف 🌟</p>
+</div>
+<div class="no-print"><button onclick="window.print()">🖨️ طباعة الشهادة</button><button onclick="goLevels()">العودة للمستويات</button></div>
+</div>
+</div>
+<footer>مدرسة البريرات حلقة ثانية بنين | إعداد المعلمة رشا محي الدين</footer>
+
+<script>
+const data={
+easy:[
+["ماذا يسمى الصف الأفقي في الجدول الدوري الحديث؟",["المجموعة","الدورة","النظير"],"الدورة"],
+["ماذا يسمى العمود الرأسي في الجدول الدوري الحديث؟",["المجموعة","الدورة","الكتلة"],"المجموعة"],
+["كم عدد مجموعات الجدول الدوري الحديث؟",["7","18","8"],"18"]
+],
+medium:[
+["ما المجموعة التي تتفاعل عناصرها مع الفلزات لتكوين الأملاح؟",["الغازات النبيلة","الهالوجينات","الفلزات الانتقالية"],"الهالوجينات"],
+["تمتلك نظائر العنصر نفس عدد:",["البروتونات","النيوترونات","العدد الكتلي"],"البروتونات"],
+["تختلف نظائر العنصر في عدد:",["البروتونات","النيوترونات","العدد الذري"],"النيوترونات"],
+["أين تقع الفلزات غالباً في الجدول الدوري؟",["في الجانب الأيسر والوسط","في الجانب الأيمن فقط","في أسفل الجدول فقط"],"في الجانب الأيسر والوسط"]
+],
+hard:[
+["تم ترتيب العناصر في الجدول الدوري الحديث وفق:",["تزايد العدد الذري","اللون","تزايد الكتلة فقط"],"تزايد العدد الذري"],
+["لماذا تسمى عناصر المجموعة 18 بالغازات النبيلة؟",["شديدة التفاعل","لا تتفاعل غالباً إلا في ظروف خاصة","كلها فلزات"],"لا تتفاعل غالباً إلا في ظروف خاصة"],
+["أين تقع أشباه الفلزات غالباً؟",["على الخط المتدرج بين الفلزات واللافلزات","في المجموعة الأولى فقط","في أسفل الجدول فقط"],"على الخط المتدرج بين الفلزات واللافلزات"],
+["الفلز الوحيد المذكور في الورقة المستخدم في مقاييس الحرارة هو:",["الحديد","الزئبق","الألومنيوم"],"الزئبق"]
+]};
+let level='', correct=0, percent=0;
+function begin(){if(!name.value.trim()||!grade.value.trim()){alert('من فضلك أدخل اسمك والصف أولاً 🌟');return}start.classList.add('hidden');levels.classList.remove('hidden')}
+function load(l){level=l;levels.classList.add('hidden');quiz.classList.remove('hidden');correct=0;const titles={easy:'🟢 المستوى الأول: المستكشف العلمي',medium:'🟠 المستوى الثاني: العالم الصغير',hard:'🟣 المستوى الثالث: خبير الجدول الدوري'};title.textContent=titles[l];qs.innerHTML='';data[l].forEach((q,i)=>{let x=`<div class="question"><h3>${i+1}. ${q[0]}</h3>`;q[1].forEach(o=>x+=`<label class="option"><input type="radio" name="q${i}" value="${o}"> ${o}</label>`);qs.innerHTML+=x+'</div>'});bar.style.width='100%'}
+function finish(){correct=0;data[level].forEach((q,i)=>{let s=document.querySelector(`input[name=q${i}]:checked`);if(s&&s.value===q[2])correct++});percent=Math.round(correct/data[level].length*100);quiz.classList.add('hidden');result.classList.remove('hidden');score.textContent=`أجبت بشكل صحيح عن ${correct} من ${data[level].length} سؤال (${percent}%)`;badges.innerHTML='';if(percent>=50)badges.innerHTML+='<div class="badge">🥉 وسام المحاول المتميز</div>';if(percent>=75)badges.innerHTML+='<div class="badge">🥈 وسام العالم الصغير</div>';if(percent===100)badges.innerHTML+='<div class="badge">🥇 وسام بطل العلوم</div>';if(percent<50)badges.innerHTML='<div class="badge">🌟 وسام بداية الرحلة – حاول مرة أخرى!</div>'}
+function certificate(){result.classList.add('hidden');certificatePage.classList.remove('hidden');cname.textContent=name.value;cgrade.textContent='الصف والشعبة: '+grade.value;cscore.textContent='النتيجة: '+percent+'%'}
+function goLevels(){result.classList.add('hidden');certificatePage.classList.add('hidden');levels.classList.remove('hidden')}
+</script>
+</body></html>
